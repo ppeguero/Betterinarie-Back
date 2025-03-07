@@ -1,0 +1,6 @@
+@Betterinarie_Back_HostAddress = http://localhost:5140
+
+GET {{Betterinarie_Back_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
