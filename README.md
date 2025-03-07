@@ -16,6 +16,7 @@ operatividad interna como la experiencia del cliente.
 | José Moisés Martínez Lara    | 21393096@utcancun.edu.mx |   JoseMtz02                 |
 | José Emmanuel Pech Herrera   | 22393220@utcancun.edu.mx |   blxckbxll24               |
 | Eduardo Gutiérrez Pacheco    | 22393212@utcancun.edu.mx | Blooxt                      |
+| Edwin Alejandro Sanchez Fernandez|22393232@utcancun.edu.mx|alejandrosanfer            |
 ## Librerías utilizadas
 - Bcrypt.net-next
 - CloudinaryDotNet
