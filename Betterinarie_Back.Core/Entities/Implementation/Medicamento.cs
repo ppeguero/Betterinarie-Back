@@ -13,6 +13,10 @@ namespace Betterinarie_Back.Core.Entities.Implementation
         public int Id { get; set; }
         public string Nombre { get; set; }
         public string Descripcion { get; set; }
+        public string Dosis { get; set; }
+        public DateTime FechaVencimiento { get; set; }
+        public int Stock { get; set; }
+        public DateTime FechaCreacion { get; set; }
         public ICollection<Consulta> Consultas { get; set; } = new List<Consulta>();
     }
 }
