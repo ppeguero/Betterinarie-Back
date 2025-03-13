@@ -19,13 +19,15 @@ namespace Betterinarie_Back.Application.Mappings
             CreateMap<Rol, RolDto>()
              .ForMember(dest => dest.Nombre, opt => opt.MapFrom(src => src.Name));
 
-            // Mapeo de Mascota a MascotaDto
             CreateMap<Mascota, MascotaDto>()
-                .ForMember(dest => dest.ConsultasIds, opt => opt.MapFrom(src => src.Consultas.Select(c => c.Id).ToList()));
+                 .ForMember(dest => dest.UrlImagen, opt => opt.MapFrom(src => src.URLImagen))
+                 .ForMember(dest => dest.ConsultasIds, opt => opt.MapFrom(src => src.Consultas.Select(c => c.Id).ToList()))
+                 .ForMember(dest => dest.FechaRegistro, opt => opt.MapFrom(src => src.FechaRegistro)); 
 
-            // Mapeo de MascotaDto a Mascota
             CreateMap<MascotaDto, Mascota>()
-                .ForMember(dest => dest.Consultas, opt => opt.Ignore());
+                .ForMember(dest => dest.URLImagen, opt => opt.Ignore())
+                .ForMember(dest => dest.PublicIdImagen, opt => opt.Ignore())
+                .ForMember(dest => dest.FechaRegistro, opt => opt.Ignore()); // Evita sobrescribir FechaRegistro
 
             // Mapeo de Consulta a ConsultaDto
             CreateMap<Consulta, ConsultaDto>()
