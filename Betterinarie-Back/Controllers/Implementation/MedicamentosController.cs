@@ -2,11 +2,13 @@
 using Microsoft.AspNetCore.Mvc;
 using Betterinarie_Back.Application.Dtos.Implementation;
 using Betterinarie_Back.Application.Interfaces.Implementation;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Betterinarie_Back.API.Controllers.Implementation
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "Veterinario,Administrador")]
     public class MedicamentosController : ControllerBase
     {
         private readonly IMedicamentoService _medicamentoService;

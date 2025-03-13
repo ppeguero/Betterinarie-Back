@@ -83,9 +83,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseAuthentication();
+app.UseAuthorization(); 
 app.UseHttpsRedirection();
 
-app.UseAuthorization();
 app.UseMiddleware<ErrorLoggingMiddleware>();
 
 app.MapControllers();

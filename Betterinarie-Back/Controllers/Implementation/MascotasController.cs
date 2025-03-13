@@ -3,11 +3,13 @@ using Microsoft.AspNetCore.Mvc;
 using Betterinarie_Back.Application.Dtos.Implementation;
 using Betterinarie_Back.Application.Interfaces.Implementation;
 using Betterinarie_Back.Core.Interfaces.Data;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Veterinaria.API.Controllers.Implementation
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize()]
     public class MascotasController : ControllerBase
     {
         private readonly IMascotaService _mascotaService;
