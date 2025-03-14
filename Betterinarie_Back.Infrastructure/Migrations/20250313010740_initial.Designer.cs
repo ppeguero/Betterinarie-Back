@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Betterinarie_Back.Infrastructure.Migrations
 {
     [DbContext(typeof(BetterinarieContext))]
-    [Migration("20250312181811_Initial")]
-    partial class Initial
+    [Migration("20250313010740_initial")]
+    partial class initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -51,7 +51,7 @@ namespace Betterinarie_Back.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Cliente");
+                    b.ToTable("Cliente", (string)null);
                 });
 
             modelBuilder.Entity("Betterinarie_Back.Core.Entities.Implementation.Consulta", b =>

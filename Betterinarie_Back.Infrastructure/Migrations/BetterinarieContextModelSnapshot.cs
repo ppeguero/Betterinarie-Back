@@ -48,7 +48,7 @@ namespace Betterinarie_Back.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Cliente");
+                    b.ToTable("Cliente", (string)null);
                 });
 
             modelBuilder.Entity("Betterinarie_Back.Core.Entities.Implementation.Consulta", b =>
