@@ -3,10 +3,12 @@ using Microsoft.AspNetCore.Mvc;
 using Betterinarie_Back.Application.Dtos.Implementation;
 using Betterinarie_Back.Application.Interfaces.Implementation;
 using Betterinarie_Back.Application.Services.Implementation;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Betterinarie_Back.API.Controllers.Implementation
 {
     [Route("api/[controller]")]
+    [Authorize]
     [ApiController]
     public class ClienteController : ControllerBase
     {

@@ -3,11 +3,13 @@ using System.Threading.Tasks;
 using Betterinarie_Back.Application.Dtos.Implementation;
 using Betterinarie_Back.Application.Dtos.Security;
 using Betterinarie_Back.Application.Interfaces.Implementation;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Betterinarie_Back.Controllers.Implementation
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize(Roles = "Administrador")]
     public class UsuariosController : ControllerBase
     {
         private readonly IUsuarioService _usuarioService;
