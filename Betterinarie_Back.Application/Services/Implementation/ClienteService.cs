@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Betterinarie_Back.Application.Dtos.Implementation;
 using Betterinarie_Back.Application.Interfaces.Implementation;
@@ -14,11 +13,11 @@ namespace Betterinarie_Back.Application.Services.Implementation
 {
     public class ClienteService : IClienteService
     {
-        private readonly IRepository<Cliente> _clienteRepository;
+        private readonly IClienteRepository _clienteRepository;
         private readonly IMapper _mapper;
         private readonly IErrorLogService _errorLogService;
 
-        public ClienteService(IRepository<Cliente> clienteRepository, IMapper mapper, IErrorLogService errorLogService)
+        public ClienteService(IClienteRepository clienteRepository, IMapper mapper, IErrorLogService errorLogService)
         {
             _clienteRepository = clienteRepository;
             _mapper = mapper;
@@ -81,19 +80,26 @@ namespace Betterinarie_Back.Application.Services.Implementation
             }
         }
 
-        public async Task UpdateCliente(ClienteDto updateDto)
+        public async Task UpdateCliente(ClienteUpdateDto updateDto)
         {
             try
             {
-                var dueño = await _clienteRepository.GetById(updateDto.Id);
-                if (dueño == null) throw new Exception("Dueño no encontrado");
-                _mapper.Map(updateDto, dueño);
-                await _clienteRepository.Update(dueño);
+                var cliente = await _clienteRepository.GetById(updateDto.Id, c => c.Mascotas);
+                if (cliente == null) throw new Exception("Cliente no encontrado");
+
+                // Asignación manual de campos
+                cliente.Nombre = updateDto.Nombre;
+                cliente.Apellido = updateDto.Apellido;
+                cliente.Direccion = updateDto.Direccion;
+                cliente.Telefono = updateDto.Telefono;
+
+                // Llamar al repositorio para sincronizar mascotas y guardar
+                await _clienteRepository.UpdateClienteWithMascotasAsync(cliente, updateDto.MascotasIds);
             }
             catch (Exception ex)
             {
                 await _errorLogService.LogErrorAsync(
-                    message: "Error al actualizar dueño",
+                    message: "Error al actualizar cliente",
                     stackTrace: ex.StackTrace,
                     userId: null
                 );
@@ -105,15 +111,14 @@ namespace Betterinarie_Back.Application.Services.Implementation
         {
             try
             {
-                await _clienteRepository.Delete(id);
+                await _clienteRepository.DeleteClienteWithMascotasAsync(id);
             }
             catch (Exception ex)
             {
-                await _errorLogService.LogErrorAsync(
-                    message: "Error al eliminar dueño",
-                    stackTrace: ex.StackTrace,
-                    userId: null
-                );
+                await _errorLogService.LogErrorAsync(message: "Error al eliminar cliente",
+                   stackTrace: ex.StackTrace,
+                   userId: null
+               );
                 throw;
             }
         }

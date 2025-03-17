@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Betterinarie_Back.Application.Dtos.Implementation;
 using Betterinarie_Back.Application.Interfaces.Implementation;
-using Betterinarie_Back.Application.Services.Implementation;
 using Microsoft.AspNetCore.Authorization;
 
 namespace Betterinarie_Back.API.Controllers.Implementation
@@ -42,11 +41,12 @@ namespace Betterinarie_Back.API.Controllers.Implementation
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, [FromBody] ClienteDto dueñoDto)
+        public async Task<IActionResult> Update(int id, [FromBody] ClienteUpdateDto clienteDto)
         {
-            if (id != dueñoDto.Id) return BadRequest("El ID del dueño no coincide");
+            if (id != clienteDto.Id) return BadRequest("El ID del cliente no coincide");
             if (!ModelState.IsValid) return BadRequest(ModelState);
-            await _clienteService.UpdateCliente(dueñoDto);
+
+            await _clienteService.UpdateCliente(clienteDto);
             return NoContent();
         }
 

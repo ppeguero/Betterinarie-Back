@@ -11,6 +11,8 @@ namespace Betterinarie_Back.Core.Entities.Implementation
 {
     public class Mascota : EntitieBase
     {
+        public string UrlImagen;
+
         public string Especie { get; set; }
         public string Raza { get; set; }
         public DateTime FechaNacimiento { get; set; }
