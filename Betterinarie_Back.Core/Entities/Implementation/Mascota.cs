@@ -5,18 +5,18 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Betterinarie_Back.Core.Entities.Base;
 
 namespace Betterinarie_Back.Core.Entities.Implementation
 {
-    public class Mascota
+    public class Mascota : EntitieBase
     {
-
-        [Key]
-        public int Id { get; set; }
-        public string Nombre { get; set; }
         public string Especie { get; set; }
         public string Raza { get; set; }
         public DateTime FechaNacimiento { get; set; }
+
+        public string? URLImagen { get; set; }
+        public string? PublicIdImagen { get; set; }
 
         [ForeignKey("Usuario")]
         public int? UsuarioId { get; set; }

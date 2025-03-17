@@ -2,11 +2,14 @@
 using Microsoft.AspNetCore.Mvc;
 using Betterinarie_Back.Application.Dtos.Implementation;
 using Betterinarie_Back.Application.Interfaces.Implementation;
+using Betterinarie_Back.Core.Interfaces.Data;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Veterinaria.API.Controllers.Implementation
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize()]
     public class MascotasController : ControllerBase
     {
         private readonly IMascotaService _mascotaService;
@@ -32,18 +35,20 @@ namespace Veterinaria.API.Controllers.Implementation
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] MascotaDto mascotaDto)
+        public async Task<IActionResult> Create([FromForm] MascotaDto mascotaDto)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
+
             var mascota = await _mascotaService.CreateMascota(mascotaDto);
             return CreatedAtAction(nameof(GetById), new { id = mascota.Id }, mascota);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, [FromBody] MascotaDto mascotaDto)
+        public async Task<IActionResult> Update(int id, [FromForm] MascotaDto mascotaDto)
         {
             if (id != mascotaDto.Id) return BadRequest("El ID de la mascota no coincide");
             if (!ModelState.IsValid) return BadRequest(ModelState);
+
             await _mascotaService.UpdateMascota(mascotaDto);
             return NoContent();
         }
@@ -54,7 +59,6 @@ namespace Veterinaria.API.Controllers.Implementation
             await _mascotaService.DeleteMascota(id);
             return NoContent();
         }
-
 
         [HttpGet("dueño/{clienteId}")]
         public async Task<IActionResult> GetByCliente(int clienteId)

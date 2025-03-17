@@ -15,9 +15,6 @@ namespace Betterinarie_Back.Infrastructure.Repositories.Implementation
     {
         public MascotaRepository(BetterinarieContext context) : base(context) { }
 
-        //aqui va unicamente logica personalizada que se requiera como por ejemplo obtener todas las mascotas 
-        //que fueron citadas en un dia especifico
-
         public async Task<IEnumerable<Mascota>> GetMascotasByClienteId(int clienteId)
         {
             return await _context.Mascotas

@@ -15,5 +15,7 @@ namespace Betterinarie_Back.Core.Entities.Implementation
         public DateTime? RefreshTokenExpiryTime { get; set; }
         public ICollection<Consulta> Consultas { get; set; }
 
+
+
     }
 }

@@ -1,9 +1,11 @@
 using Betterinarie_Back.Application.Interfaces.Implementation;
 using Betterinarie_Back.Application.Interfaces.Security;
 using Betterinarie_Back.Application.Mappings;
+using Betterinarie_Back.Application.Services.Data;
 using Betterinarie_Back.Application.Services.Implementation;
 using Betterinarie_Back.Application.Services.Security;
 using Betterinarie_Back.Core.Entities.Implementation;
+using Betterinarie_Back.Core.Interfaces.Data;
 using Betterinarie_Back.Core.Interfaces.Implementation;
 using Betterinarie_Back.Infrastructure.Data;
 using Betterinarie_Back.Infrastructure.Repositories.Implementation;
@@ -68,6 +70,9 @@ builder.Services.AddScoped<IMedicamentoService, MedicamentoService>();
 builder.Services.AddScoped<IClienteService, ClienteService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IErrorLogService, ErrorLogService>();
+builder.Services.AddScoped<SeedData>();
+builder.Services.AddScoped<ICloudinaryService, CloudinaryService>();
+
 
 var app = builder.Build();
 
@@ -78,19 +83,11 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseAuthentication();
+app.UseAuthorization(); 
 app.UseHttpsRedirection();
 
-app.UseAuthorization();
 app.UseMiddleware<ErrorLoggingMiddleware>();
-
-using (var scope = app.Services.CreateScope())
-{
-    var context = scope.ServiceProvider.GetRequiredService<BetterinarieContext>();
-    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<Usuario>>();
-    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<Rol>>();
-
-    await SeedData.Seed(context, userManager, roleManager);
-}
 
 app.MapControllers();
 

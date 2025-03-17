@@ -8,6 +8,7 @@ using Betterinarie_Back.Application.Interfaces.Implementation;
 using Betterinarie_Back.Application.Interfaces.Security;
 using Betterinarie_Back.Core.Entities.Implementation;
 using Betterinarie_Back.Core.Interfaces.Implementation;
+using Betterinarie_Back.Core.Interfaces.Data;
 
 namespace Betterinarie_Back.Application.Services.Implementation
 {
@@ -16,13 +17,15 @@ namespace Betterinarie_Back.Application.Services.Implementation
         private readonly IRepository<Mascota> _petRepository;
         private readonly IMascotaRepository _mascotaRepository;
         private readonly IMapper _mapper;
+        private readonly ICloudinaryService _cloudinaryService;
         private readonly IErrorLogService _errorLogService;
 
-        public MascotaService(IMascotaRepository mascotaRepository, IRepository<Mascota> petRepository, IMapper mapper, IErrorLogService errorLogService)
+        public MascotaService(IMascotaRepository mascotaRepository, IRepository<Mascota> petRepository, IMapper mapper, IErrorLogService errorLogService, ICloudinaryService cloudinaryService)
         {
             _mascotaRepository = mascotaRepository;
             _petRepository = petRepository;
             _mapper = mapper;
+            _cloudinaryService = cloudinaryService;
             _errorLogService = errorLogService;
         }
 
@@ -66,7 +69,25 @@ namespace Betterinarie_Back.Application.Services.Implementation
         {
             try
             {
+                if (string.IsNullOrWhiteSpace(createDto.Nombre))
+                {
+                    throw new ArgumentException("El nombre de la mascota es obligatorio.");
+                }
+
                 var mascota = _mapper.Map<Mascota>(createDto);
+
+                if (createDto.ImagenFile != null && createDto.ImagenFile.Length > 0)
+                {
+                    string fileName = createDto.Nombre.Replace(" ", "_");
+                    var uploadResult = await _cloudinaryService.UploadImage(
+                        createDto.ImagenFile,
+                        "mascotas",
+                        fileName
+                    );
+                    mascota.URLImagen = uploadResult.SecureUrl.ToString();
+                    mascota.PublicIdImagen = uploadResult.PublicId;
+                }
+
                 await _mascotaRepository.Add(mascota);
                 return _mapper.Map<MascotaDto>(mascota);
             }
@@ -88,6 +109,21 @@ namespace Betterinarie_Back.Application.Services.Implementation
                 var mascota = await _mascotaRepository.GetById(updateDto.Id);
                 if (mascota == null) throw new Exception("Mascota no encontrada");
                 _mapper.Map(updateDto, mascota);
+
+                if (updateDto.ImagenFile != null && updateDto.ImagenFile.Length > 0) {
+                    if (!string.IsNullOrEmpty(mascota.PublicIdImagen)) 
+                    {
+                        await _cloudinaryService.DeleteImage(mascota.PublicIdImagen);
+                    }
+
+                    var uploadResult = await _cloudinaryService.UploadImage(
+                        updateDto.ImagenFile,
+                        "mascotas",
+                        updateDto.Nombre.Replace(" ", "_"));
+                    mascota.URLImagen = uploadResult.SecureUrl.ToString();
+                    mascota.PublicIdImagen = uploadResult.PublicId;
+                }
+
                 await _mascotaRepository.Update(mascota);
             }
             catch (Exception ex)
@@ -105,6 +141,15 @@ namespace Betterinarie_Back.Application.Services.Implementation
         {
             try
             {
+                var mascota = await _mascotaRepository.GetById(id);
+                if (mascota == null) throw new Exception("Mascota no encontrada");
+
+                // Eliminar la imagen de Cloudinary si existe
+                if (!string.IsNullOrEmpty(mascota.PublicIdImagen))
+                {
+                    await _cloudinaryService.DeleteImage(mascota.PublicIdImagen);
+                }
+
                 await _mascotaRepository.Delete(id);
             }
             catch (Exception ex)
