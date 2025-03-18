@@ -47,8 +47,7 @@ namespace Betterinarie_Back.Application.Mappings
 
             // Mapeo de Cliente a ClienteDto
             CreateMap<Cliente, ClienteDto>()
-                .ForMember(dest => dest.MascotasIds, opt => opt.MapFrom(src => src.Mascotas.Select(m => m.Id).ToList()));
-
+                .ForMember(dest => dest.Mascotas, opt => opt.MapFrom(src => src.Mascotas));
             // Mapeo de ClienteDto a Cliente
             CreateMap<ClienteDto, Cliente>()
                 .ForMember(dest => dest.Mascotas, opt => opt.Ignore());

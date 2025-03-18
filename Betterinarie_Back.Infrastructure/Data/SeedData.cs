@@ -1,6 +1,9 @@
 ﻿using Betterinarie_Back.Core.Entities.Implementation;
 using Betterinarie_Back.Infrastructure.Data;
 using Microsoft.AspNetCore.Identity;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 public class SeedData
 {
@@ -17,10 +20,8 @@ public class SeedData
 
     public async Task ExecuteSeed()
     {
-        // Asegurar que la base de datos esté creada
         _context.Database.EnsureCreated();
 
-        // 1. Sembrar roles
         string[] roleNames = { "Administrador", "Veterinario", "Recepcionista" };
         foreach (var roleName in roleNames)
         {
@@ -30,7 +31,6 @@ public class SeedData
             }
         }
 
-        // 2. Sembrar usuarios
         var users = new[]
         {
             new { Email = "admin@example.com", Nombre = "Administrador", Apellido = "User", Password = "Admin123!", Role = "Administrador" },
@@ -72,7 +72,7 @@ public class SeedData
                 new Cliente { Nombre = "Maria", Apellido = "Gonzalez", Direccion = "Avenida Siempreviva 742", Telefono = "987654321" }
             };
             _context.Clientes.AddRange(clientes);
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync(); // Guardar para generar IDs de clientes
         }
 
         // 4. Sembrar mascotas asociadas a clientes
@@ -81,8 +81,13 @@ public class SeedData
 
         if (cliente1 != null && cliente2 != null && !_context.Mascotas.Any())
         {
+            var random = new Random();
+            var hoy = DateTime.UtcNow.Date;
+            var defaultImageUrl = "https://i.imgur.com/SDdEGJ9.png";
+
+
             var mascotas = new[]
-             {
+            {
                 new Mascota
                 {
                     Nombre = "Firulais",
@@ -90,7 +95,8 @@ public class SeedData
                     Raza = "Labrador",
                     FechaNacimiento = new DateTime(2020, 5, 10),
                     ClienteId = cliente1.Id,
-                    FechaRegistro = new DateTime(2023, 1, 1, 12, 0, 0, DateTimeKind.Utc) // Fecha específica
+                   FechaRegistro = hoy,
+                   URLImagen = defaultImageUrl
                 },
                 new Mascota
                 {
@@ -99,7 +105,8 @@ public class SeedData
                     Raza = "Siames",
                     FechaNacimiento = new DateTime(2019, 8, 15),
                     ClienteId = cliente1.Id,
-                    FechaRegistro = new DateTime(2023, 2, 1, 12, 0, 0, DateTimeKind.Utc)
+                    FechaRegistro = hoy,
+                    URLImagen = defaultImageUrl
                 },
                 new Mascota
                 {
@@ -108,7 +115,8 @@ public class SeedData
                     Raza = "Bulldog",
                     FechaNacimiento = new DateTime(2018, 3, 20),
                     ClienteId = cliente2.Id,
-                    FechaRegistro = new DateTime(2023, 3, 1, 12, 0, 0, DateTimeKind.Utc)
+                    FechaRegistro = hoy,
+                    URLImagen = defaultImageUrl
                 },
                 new Mascota
                 {
@@ -117,21 +125,82 @@ public class SeedData
                     Raza = "Persa",
                     FechaNacimiento = new DateTime(2021, 1, 30),
                     ClienteId = cliente2.Id,
-                    FechaRegistro = new DateTime(2023, 4, 1, 12, 0, 0, DateTimeKind.Utc)
-                }
+                   FechaRegistro = hoy,
+                   URLImagen = defaultImageUrl
+                },
+                  new Mascota
+                {
+                    Nombre = "Luna",
+                    Especie = "Gato",
+                    Raza = "Persa",
+                    FechaNacimiento = new DateTime(2021, 1, 30),
+                    ClienteId = cliente1.Id,
+                   FechaRegistro = hoy,
+                   URLImagen = defaultImageUrl
+                },
+                   new Mascota
+                {
+                    Nombre = "Firulais",
+                    Especie = "Perro",
+                    Raza = "Labrador",
+                    FechaNacimiento = new DateTime(2020, 5, 10),
+                    ClienteId = cliente1.Id,
+                   FechaRegistro = hoy,
+                   URLImagen = defaultImageUrl
+                },
+                new Mascota
+                {
+                    Nombre = "Michi",
+                    Especie = "Gato",
+                    Raza = "Siames",
+                    FechaNacimiento = new DateTime(2019, 8, 15),
+                    ClienteId = cliente1.Id,
+                    FechaRegistro = hoy,
+                    URLImagen = defaultImageUrl
+                },
+                new Mascota
+                {
+                    Nombre = "Bobby",
+                    Especie = "Perro",
+                    Raza = "Bulldog",
+                    FechaNacimiento = new DateTime(2018, 3, 20),
+                    ClienteId = cliente2.Id,
+                    FechaRegistro = hoy,
+                    URLImagen = defaultImageUrl
+                },
+                new Mascota
+                {
+                    Nombre = "Luna",
+                    Especie = "Gato",
+                    Raza = "Persa",
+                    FechaNacimiento = new DateTime(2021, 1, 30),
+                    ClienteId = cliente2.Id,
+                   FechaRegistro = hoy,
+                   URLImagen = defaultImageUrl
+                },
+                  new Mascota
+                {
+                    Nombre = "Luna",
+                    Especie = "Gato",
+                    Raza = "Persa",
+                    FechaNacimiento = new DateTime(2021, 1, 30),
+                    ClienteId = cliente1.Id,
+                   FechaRegistro = hoy,
+                   URLImagen = defaultImageUrl
+                },
+
             };
             _context.Mascotas.AddRange(mascotas);
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync(); 
         }
 
-        // 5. Sembrar medicamentos
         if (!_context.Medicamentos.Any())
         {
             var medicamentos = new[]
             {
-                new Medicamento { Nombre = "Antibiotico A", Descripcion = "Para infecciones bacterianas" },
-                new Medicamento { Nombre = "Analgesico B", Descripcion = "Para el dolor moderado" },
-                new Medicamento { Nombre = "Antiparasitario C", Descripcion = "Para eliminar parasitos internos" }
+                new Medicamento { Nombre = "Antibiotico A", Descripcion = "Para infecciones bacterianas", Dosis = "10 mg/kg" },
+                new Medicamento { Nombre = "Analgesico B", Descripcion = "Para el dolor moderado", Dosis = "5 mg/kg" },
+                new Medicamento { Nombre = "Antiparasitario C", Descripcion = "Para eliminar parasitos internos", Dosis = "2 mg/kg" }
             };
             _context.Medicamentos.AddRange(medicamentos);
             await _context.SaveChangesAsync();
