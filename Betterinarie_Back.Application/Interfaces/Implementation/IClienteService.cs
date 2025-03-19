@@ -12,7 +12,7 @@ namespace Betterinarie_Back.Application.Interfaces.Implementation
         Task<ClienteDto> GetClienteById(int id);
         Task<IEnumerable<ClienteDto>> GetAllClientes();
         Task<ClienteDto> CreateCliente(ClienteDto createDto);
-        Task UpdateCliente(ClienteDto updateDto);
+        Task UpdateCliente(ClienteUpdateDto updateDto);
         Task DeleteCliente(int id);
     }
 }
