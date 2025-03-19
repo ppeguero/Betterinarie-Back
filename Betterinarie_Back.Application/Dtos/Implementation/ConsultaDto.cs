@@ -10,9 +10,10 @@ namespace Betterinarie_Back.Application.Dtos.Implementation
     {
         public int Id { get; set; }
         public DateTime Fecha { get; set; }
+        public TimeOnly Hora {  get; set; }
         public string Motivo { get; set; }
         public int? MascotaId { get; set; }
         public int? VeterinarioId { get; set; }
-        //public List<int> MedicamentosIds { get; set; } = new List<int>();
+        public List<int> MedicamentosIds { get; set; } = new List<int>();
     }
 }
