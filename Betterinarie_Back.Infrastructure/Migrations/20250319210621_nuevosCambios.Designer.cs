@@ -4,6 +4,7 @@ using Betterinarie_Back.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Betterinarie_Back.Infrastructure.Migrations
 {
     [DbContext(typeof(BetterinarieContext))]
-    partial class BetterinarieContextModelSnapshot : ModelSnapshot
+    [Migration("20250319210621_nuevosCambios")]
+    partial class nuevosCambios
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
