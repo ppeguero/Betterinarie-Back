@@ -89,6 +89,7 @@ builder.Services.AddAuthentication(x =>
     x.SaveToken = true;
     x.TokenValidationParameters = new TokenValidationParameters
     {
+        ValidateLifetime = true,
         ValidateIssuerSigningKey = true,
         IssuerSigningKey = new SymmetricSecurityKey(key),
         ValidateIssuer = false,
@@ -115,7 +116,6 @@ builder.Services.AddScoped<ICloudinaryService, CloudinaryService>();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();

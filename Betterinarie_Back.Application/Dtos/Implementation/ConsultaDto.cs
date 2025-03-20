@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Betterinarie_Back.Core.Entities.Implementation.Enum;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,8 +12,10 @@ namespace Betterinarie_Back.Application.Dtos.Implementation
         public int Id { get; set; }
         public DateTime Fecha { get; set; }
         public string Motivo { get; set; }
+        public int Estado { get; set; }
         public int? MascotaId { get; set; }
         public int? VeterinarioId { get; set; }
+        public string VeterinarioNombre { get; set; }
         public List<int> MedicamentosIds { get; set; } = new List<int>();
     }
 }
