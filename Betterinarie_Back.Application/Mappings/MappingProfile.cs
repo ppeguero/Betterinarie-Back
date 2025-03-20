@@ -33,13 +33,12 @@ namespace Betterinarie_Back.Application.Mappings
             // Mapeo de Consulta a ConsultaDto
             CreateMap<Consulta, ConsultaDto>()
                 .ForMember(dest => dest.MedicamentosIds, opt => opt.MapFrom(src => src.Medicamentos.Select(m => m.Id).ToList()));
-
             // Mapeo de Consulta a ConsultaDto
-            CreateMap<Consulta, ConsultaDto>()
-             .ForMember(dest => dest.Estatus, opt => opt.MapFrom(src => src.Estatus)); // Mapea el enum directamente
-
-            CreateMap<ConsultaDto, Consulta>()
-                .ForMember(dest => dest.Estatus, opt => opt.MapFrom(src => src.Estatus));
+           CreateMap<Consulta, ConsultaDto>()
+            .ForMember(dest => dest.Estatus, opt => opt.MapFrom(src => src.Estatus)); 
+        
+        CreateMap<ConsultaDto, Consulta>()
+            .ForMember(dest => dest.Estatus, opt => opt.MapFrom(src => src.Estatus));
 
             // Mapeo de ConsultaDto a Consulta
             CreateMap<ConsultaDto, Consulta>()
