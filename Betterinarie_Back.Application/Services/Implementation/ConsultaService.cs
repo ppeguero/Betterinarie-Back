@@ -8,6 +8,7 @@ using Betterinarie_Back.Application.Interfaces.Implementation;
 using Betterinarie_Back.Application.Interfaces.Security;
 using Betterinarie_Back.Core.Entities.Implementation;
 using Betterinarie_Back.Core.Interfaces.Implementation;
+using Betterinarie_Back.Core.Entities.Implementation.Enum;
 
 namespace Betterinarie_Back.Application.Services.Implementation
 {
@@ -88,6 +89,12 @@ namespace Betterinarie_Back.Application.Services.Implementation
             {
                 var consulta = await _consultaRepository.GetById(updateDto.Id);
                 if (consulta == null) throw new Exception("Consulta no encontrada");
+
+                if (!EsCambioDeEstadoValido(consulta.Estatus, updateDto.Estatus))
+                {
+                    throw new Exception("Cambio de estado no permitido");
+                }
+
                 _mapper.Map(updateDto, consulta);
                 await _consultaRepository.Update(consulta);
             }
@@ -100,6 +107,19 @@ namespace Betterinarie_Back.Application.Services.Implementation
                 );
                 throw;
             }
+        }
+
+        private bool EsCambioDeEstadoValido(EstatusConsulta estadoActual, EstatusConsulta nuevoEstado)
+        {
+            var transicionesValidas = new Dictionary<EstatusConsulta, List<EstatusConsulta>>
+            {
+                { EstatusConsulta.Pendiente, new List<EstatusConsulta> { EstatusConsulta.EnProgreso, EstatusConsulta.Cancelada } },
+                { EstatusConsulta.EnProgreso, new List<EstatusConsulta> { EstatusConsulta.Completada, EstatusConsulta.Cancelada } },
+                { EstatusConsulta.Completada, new List<EstatusConsulta>() }, 
+                { EstatusConsulta.Cancelada, new List<EstatusConsulta>() }  
+            };
+
+            return transicionesValidas.ContainsKey(estadoActual) && transicionesValidas[estadoActual].Contains(nuevoEstado);
         }
 
         public async Task DeleteConsulta(int id)
