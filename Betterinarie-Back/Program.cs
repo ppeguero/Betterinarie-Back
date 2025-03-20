@@ -98,6 +98,19 @@ builder.Services.AddAuthentication(x =>
     };
 });
 
+var myAllowedOrigins = "_myAllowedOrigins";
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: myAllowedOrigins,
+        policy =>
+        {
+            policy.WithOrigins("http://localhost:5173") // Permitir tu frontend de Vue
+                  .AllowAnyMethod()
+                  .AllowAnyHeader();
+        });
+});
+
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped<IUsuarioService, UsuarioService>();
 builder.Services.AddScoped<IRolService, RolService>();
@@ -126,6 +139,7 @@ app.UseCors("Front");
 app.UseAuthentication();
 app.UseAuthorization(); 
 app.UseHttpsRedirection();
+app.UseCors(myAllowedOrigins);
 
 app.UseMiddleware<ErrorLoggingMiddleware>();
 

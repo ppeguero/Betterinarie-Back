@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Betterinarie_Back.Application.Dtos.Implementation;
 using Betterinarie_Back.Core.Entities.Implementation;
+using Betterinarie_Back.Core.Entities.Implementation.Enum;
 
 namespace Betterinarie_Back.Application.Mappings
 {

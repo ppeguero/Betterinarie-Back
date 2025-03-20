@@ -89,6 +89,12 @@ namespace Betterinarie_Back.Application.Services.Implementation
             {
                 var consulta = await _consultaRepository.GetById(updateDto.Id);
                 if (consulta == null) throw new Exception("Consulta no encontrada");
+
+                if (!EsCambioDeEstadoValido(consulta.Estatus, updateDto.Estatus))
+                {
+                    throw new Exception("Cambio de estado no permitido");
+                }
+
                 _mapper.Map(updateDto, consulta);
                 await _consultaRepository.Update(consulta);
             }
@@ -111,6 +117,7 @@ namespace Betterinarie_Back.Application.Services.Implementation
                 { EstatusConsulta.EnProgreso, new List<EstatusConsulta> { EstatusConsulta.Completada, EstatusConsulta.Cancelada } },
                 { EstatusConsulta.Completada, new List<EstatusConsulta>() },
                 { EstatusConsulta.Cancelada, new List<EstatusConsulta>() }
+
             };
 
             return transicionesValidas.ContainsKey(estadoActual) && transicionesValidas[estadoActual].Contains(nuevoEstado);

@@ -11,6 +11,8 @@ namespace Betterinarie_Back.Application.Dtos.Implementation
     {
         public int Id { get; set; }
         public DateTime Fecha { get; set; }
+        public TimeOnly Hora {  get; set; }
+        public EstatusConsulta Estatus { get; set; }
         public string Motivo { get; set; }
         public int Estado { get; set; }
         public int? MascotaId { get; set; }

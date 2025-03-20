@@ -14,6 +14,8 @@ namespace Betterinarie_Back.Core.Entities.Implementation
         [Key]
         public int Id { get; set; }
         public DateTime Fecha { get; set; }
+        public TimeOnly Hora { get; set; }
+
         public string Motivo { get; set; }
 
         public EstatusConsulta Estatus {  get; set; }
