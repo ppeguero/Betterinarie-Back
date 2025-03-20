@@ -9,6 +9,7 @@ namespace Betterinarie_Back.API.Controllers.Implementation
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
+
     public class ConsultasController : ControllerBase
     {
         private readonly IConsultaService _consultaService;

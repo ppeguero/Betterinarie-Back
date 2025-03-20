@@ -40,7 +40,7 @@ namespace Betterinarie_Back.Application.Services.Security
                 var refreshToken = Guid.NewGuid().ToString();
 
                 usuario.RefreshToken = refreshToken;
-                usuario.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(7);
+                usuario.RefreshTokenExpiryTime = DateTime.UtcNow.AddMinutes(30);
                 await _userManager.UpdateAsync(usuario);
                 return (token, refreshToken);
             }
@@ -99,7 +99,7 @@ namespace Betterinarie_Back.Application.Services.Security
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.UtcNow.AddHours(1),
+                Expires = DateTime.UtcNow.AddMinutes(15),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(keyBytes), SecurityAlgorithms.HmacSha256Signature)
             };
             var tokenHandler = new JwtSecurityTokenHandler();

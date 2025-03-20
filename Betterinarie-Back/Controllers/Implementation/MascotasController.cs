@@ -10,6 +10,7 @@ namespace Veterinaria.API.Controllers.Implementation
     [Route("api/[controller]")]
     [ApiController]
     [Authorize()]
+
     public class MascotasController : ControllerBase
     {
         private readonly IMascotaService _mascotaService;
@@ -60,11 +61,19 @@ namespace Veterinaria.API.Controllers.Implementation
             return NoContent();
         }
 
-        [HttpGet("dueño/{clienteId}")]
-        public async Task<IActionResult> GetByCliente(int clienteId)
+        //[HttpGet("dueño/{clienteId}")]
+        //public async Task<IActionResult> GetByCliente(int clienteId)
+        //{
+        //    var mascotas = await _mascotaService.GetMascotasByCliente(clienteId);
+        //    return Ok(mascotas);
+        //}
+
+        [HttpGet("{id}/historial-citas")]
+        public async Task<IActionResult> GetHistorialCitas(int id)
         {
-            var mascotas = await _mascotaService.GetMascotasByCliente(clienteId);
-            return Ok(mascotas);
+            var historial = await _mascotaService.GetHistorialCitasAsync(id);
+            if (historial == null || !historial.Any()) return NotFound("No se encontraron citas para esta mascota.");
+            return Ok(historial);
         }
     }
 }

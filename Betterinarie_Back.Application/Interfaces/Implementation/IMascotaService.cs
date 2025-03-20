@@ -14,6 +14,8 @@ namespace Betterinarie_Back.Application.Interfaces.Implementation
         Task<MascotaDto> CreateMascota(MascotaDto createDto);
         Task UpdateMascota(MascotaDto updateDto);
         Task DeleteMascota(int id);
-        Task<IEnumerable<MascotaDto>> GetMascotasByCliente(int clienteId);
+        //Task<IEnumerable<MascotaDto>> GetMascotasByCliente(int clienteId);
+
+        Task<IEnumerable<ConsultaDto>> GetHistorialCitasAsync(int mascotaId);
     }
 }

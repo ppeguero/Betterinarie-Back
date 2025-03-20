@@ -115,12 +115,14 @@ namespace Betterinarie_Back.Application.Services.Implementation
             {
                 { EstatusConsulta.Pendiente, new List<EstatusConsulta> { EstatusConsulta.EnProgreso, EstatusConsulta.Cancelada } },
                 { EstatusConsulta.EnProgreso, new List<EstatusConsulta> { EstatusConsulta.Completada, EstatusConsulta.Cancelada } },
-                { EstatusConsulta.Completada, new List<EstatusConsulta>() }, 
-                { EstatusConsulta.Cancelada, new List<EstatusConsulta>() }  
+                { EstatusConsulta.Completada, new List<EstatusConsulta>() },
+                { EstatusConsulta.Cancelada, new List<EstatusConsulta>() }
+
             };
 
             return transicionesValidas.ContainsKey(estadoActual) && transicionesValidas[estadoActual].Contains(nuevoEstado);
         }
+
 
         public async Task DeleteConsulta(int id)
         {
