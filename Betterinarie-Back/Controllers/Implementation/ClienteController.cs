@@ -7,8 +7,9 @@ using Microsoft.AspNetCore.Authorization;
 namespace Betterinarie_Back.API.Controllers.Implementation
 {
     [Route("api/[controller]")]
-    [Authorize]
     [ApiController]
+    [Authorize]
+
     public class ClienteController : ControllerBase
     {
         private readonly IClienteService _clienteService;

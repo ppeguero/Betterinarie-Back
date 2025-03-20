@@ -144,7 +144,6 @@ namespace Betterinarie_Back.Application.Services.Implementation
                 var mascota = await _mascotaRepository.GetById(id);
                 if (mascota == null) throw new Exception("Mascota no encontrada");
 
-                // Eliminar la imagen de Cloudinary si existe
                 if (!string.IsNullOrEmpty(mascota.PublicIdImagen))
                 {
                     await _cloudinaryService.DeleteImage(mascota.PublicIdImagen);
@@ -164,22 +163,28 @@ namespace Betterinarie_Back.Application.Services.Implementation
         }
 
 
-        public async Task<IEnumerable<MascotaDto>> GetMascotasByCliente(int clienteId)
+        //public async Task<IEnumerable<MascotaDto>> GetMascotasByCliente(int clienteId)
+        //{
+        //    try
+        //    {
+        //        var mascotas = await _mascotaRepository.GetMascotasByClienteId(clienteId);
+        //        return _mapper.Map<IEnumerable<MascotaDto>>(mascotas);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        await _errorLogService.LogErrorAsync(
+        //            message: "Error al obtener mascotas por dueño",
+        //            stackTrace: ex.StackTrace,
+        //            userId: clienteId.ToString()
+        //        );
+        //        throw;
+        //    }
+        //}
+
+        public async Task<IEnumerable<ConsultaDto>> GetHistorialCitasAsync(int mascotaId)
         {
-            try
-            {
-                var mascotas = await _mascotaRepository.GetMascotasByClienteId(clienteId);
-                return _mapper.Map<IEnumerable<MascotaDto>>(mascotas);
-            }
-            catch (Exception ex)
-            {
-                await _errorLogService.LogErrorAsync(
-                    message: "Error al obtener mascotas por dueño",
-                    stackTrace: ex.StackTrace,
-                    userId: clienteId.ToString()
-                );
-                throw;
-            }
+            var consultas = await _mascotaRepository.GetHistorialCitas(mascotaId);
+            return _mapper.Map<IEnumerable<ConsultaDto>>(consultas);
         }
     }
 }

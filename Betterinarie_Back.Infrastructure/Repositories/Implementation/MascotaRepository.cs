@@ -15,11 +15,22 @@ namespace Betterinarie_Back.Infrastructure.Repositories.Implementation
     {
         public MascotaRepository(BetterinarieContext context) : base(context) { }
 
-        public async Task<IEnumerable<Mascota>> GetMascotasByClienteId(int clienteId)
+        //public async Task<IEnumerable<Mascota>> GetMascotasByClienteId(int clienteId)
+        //{
+        //    return await _context.Mascotas
+        //        .Where(m => m.ClienteId == clienteId)
+        //        .Include(m => m.Consultas)
+        //        .ToListAsync();
+        //}
+
+      
+        public async Task<IEnumerable<Consulta>> GetHistorialCitas(int mascotaId)
         {
-            return await _context.Mascotas
-                .Where(m => m.ClienteId == clienteId)
-                .Include(m => m.Consultas)
+            return await _context.Consultas
+                .Where(c => c.MascotaId == mascotaId)
+                .Include(c => c.Veterinario)
+                .Include(c => c.Medicamentos)
+                .OrderByDescending(c => c.Fecha)
                 .ToListAsync();
         }
     }
