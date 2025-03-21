@@ -90,6 +90,9 @@ namespace Betterinarie_Back.Application.Services.Implementation
                 var consulta = await _consultaRepository.GetById(updateDto.Id);
                 if (consulta == null) throw new Exception("Consulta no encontrada");
 
+                Console.WriteLine(consulta.Estatus);
+                Console.WriteLine( updateDto.Estatus);
+
                 if (!EsCambioDeEstadoValido(consulta.Estatus, updateDto.Estatus))
                 {
                     throw new Exception("Cambio de estado no permitido");
@@ -113,14 +116,19 @@ namespace Betterinarie_Back.Application.Services.Implementation
         {
             var transicionesValidas = new Dictionary<EstatusConsulta, List<EstatusConsulta>>
             {
-                { EstatusConsulta.Pendiente, new List<EstatusConsulta> { EstatusConsulta.EnProgreso, EstatusConsulta.Cancelada } },
-                { EstatusConsulta.EnProgreso, new List<EstatusConsulta> { EstatusConsulta.Completada, EstatusConsulta.Cancelada } },
-                { EstatusConsulta.Completada, new List<EstatusConsulta>() },
-                { EstatusConsulta.Cancelada, new List<EstatusConsulta>() }
-
+                { EstatusConsulta.Pendiente, new List<EstatusConsulta> { EstatusConsulta.EnProgreso, EstatusConsulta.Cancelada, EstatusConsulta.Completada } },
+                { EstatusConsulta.EnProgreso, new List<EstatusConsulta> { EstatusConsulta.Completada, EstatusConsulta.Cancelada, EstatusConsulta.Pendiente } },
+                { EstatusConsulta.Completada, new List<EstatusConsulta> { EstatusConsulta.EnProgreso, EstatusConsulta.Cancelada, EstatusConsulta.Pendiente } },
+                { EstatusConsulta.Cancelada, new List<EstatusConsulta> { EstatusConsulta.EnProgreso, EstatusConsulta.Completada, EstatusConsulta.Pendiente } }
             };
 
-            return transicionesValidas.ContainsKey(estadoActual) && transicionesValidas[estadoActual].Contains(nuevoEstado);
+            Console.WriteLine($"Estado actual: {estadoActual}, Nuevo estado: {nuevoEstado}");
+
+            bool valido = transicionesValidas.ContainsKey(estadoActual) && transicionesValidas[estadoActual].Contains(nuevoEstado);
+
+            Console.WriteLine($"Cambio de estado permitido: {valido}");
+
+            return valido;
         }
 
 

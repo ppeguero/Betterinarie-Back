@@ -18,7 +18,7 @@ namespace Betterinarie_Back.Core.Entities.Implementation
 
         public string Motivo { get; set; }
 
-        public EstatusConsulta Estatus {  get; set; }
+        public EstatusConsulta Estatus { get; set; }
 
         [ForeignKey("Mascota")]
         public int? MascotaId { get; set; }

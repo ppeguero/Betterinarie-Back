@@ -23,32 +23,22 @@ namespace Betterinarie_Back.Application.Mappings
             CreateMap<Mascota, MascotaDto>()
                  .ForMember(dest => dest.UrlImagen, opt => opt.MapFrom(src => src.URLImagen))
                  .ForMember(dest => dest.ConsultasIds, opt => opt.MapFrom(src => src.Consultas.Select(c => c.Id).ToList()))
-                 .ForMember(dest => dest.FechaRegistro, opt => opt.MapFrom(src => src.FechaRegistro)); 
+                 .ForMember(dest => dest.FechaRegistro, opt => opt.MapFrom(src => src.FechaRegistro));
 
             CreateMap<MascotaDto, Mascota>()
                 .ForMember(dest => dest.URLImagen, opt => opt.Ignore())
                 .ForMember(dest => dest.PublicIdImagen, opt => opt.Ignore())
-                .ForMember(dest => dest.FechaRegistro, opt => opt.Ignore()); 
+                .ForMember(dest => dest.FechaRegistro, opt => opt.Ignore());
 
             CreateMap<Consulta, ConsultaDto>()
-                .ForMember(dest => dest.Estado, opt => opt.MapFrom(src => src.Estatus))
-                .ForMember(dest => dest.VeterinarioNombre, opt => opt.MapFrom(src => src.Veterinario != null ? src.Veterinario.Nombre : null ))
+                .ForMember(dest => dest.Estatus, opt => opt.MapFrom(src => src.Estatus)) 
+                .ForMember(dest => dest.Hora, opt => opt.MapFrom(src => TimeOnly.FromDateTime(src.Fecha)))
+                .ForMember(dest => dest.EstatusNombre, opt => opt.MapFrom(src => src.Estatus.ToString()))
                 .ForMember(dest => dest.MedicamentosIds, opt => opt.MapFrom(src => src.Medicamentos.Select(m => m.Id).ToList()));
 
-            // Mapeo de Consulta a ConsultaDto
-            CreateMap<Consulta, ConsultaDto>()
-             .ForMember(dest => dest.Estatus, opt => opt.MapFrom(src => src.Estatus)); // Mapea el enum directamente
-
             CreateMap<ConsultaDto, Consulta>()
-                .ForMember(dest => dest.Estatus, opt => opt.MapFrom(src => src.Estatus));
+                .ForMember(dest => dest.Estatus, opt => opt.MapFrom(src => (EstatusConsulta)src.Estatus)); 
 
-            // Mapeo de ConsultaDto a Consulta
-            CreateMap<ConsultaDto, Consulta>()
-                .ForMember(dest => dest.Medicamentos, opt => opt.Ignore());
-                .ForMember(dest => dest.Medicamentos, opt => opt.Ignore());
-                .ForMember(dest => dest.Medicamentos, opt => opt.Ignore());
-                .ForMember(dest => dest.Medicamentos, opt => opt.Ignore());
-                .ForMember(dest => dest.Medicamentos, opt => opt.Ignore());
 
             CreateMap<Medicamento, MedicamentoDto>()
                 .ForMember(dest => dest.ConsultasIds, opt => opt.MapFrom(src => src.Consultas.Select(c => c.Id).ToList()));
