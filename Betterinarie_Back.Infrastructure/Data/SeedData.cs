@@ -1,4 +1,5 @@
 ﻿using Betterinarie_Back.Core.Entities.Implementation;
+using Betterinarie_Back.Core.Entities.Implementation.Enum;
 using Betterinarie_Back.Infrastructure.Data;
 using Microsoft.AspNetCore.Identity;
 using System;
@@ -205,5 +206,49 @@ public class SeedData
             _context.Medicamentos.AddRange(medicamentos);
             await _context.SaveChangesAsync();
         }
+
+        if (!_context.Consultas.Any())
+        {
+            var mascotas = _context.Mascotas.ToList();
+            var veterinarios = await _userManager.GetUsersInRoleAsync("Veterinario");
+            var hoy = DateTime.UtcNow.Date;
+
+            if (mascotas.Any() && veterinarios.Any())
+            {
+                var consultas = new List<Consulta>
+        {
+            new Consulta
+            {
+                Fecha = hoy,
+                Hora = new TimeOnly(10, 30),
+                Estatus = EstatusConsulta.Pendiente,
+                Motivo = "Vacunación",
+                MascotaId = mascotas[0].Id,
+                VeterinarioId = veterinarios[0].Id
+            },
+            new Consulta
+            {
+                Fecha = hoy.AddDays(1),
+                Hora = new TimeOnly(14, 45),
+                Estatus = EstatusConsulta.Completada,
+                Motivo = "Chequeo general",
+                MascotaId = mascotas[1].Id,
+                VeterinarioId = veterinarios[0].Id
+            },
+            new Consulta
+            {
+                Fecha = hoy.AddDays(2),
+                Hora = new TimeOnly(9, 15),
+                Estatus = EstatusConsulta.Cancelada,
+                Motivo = "Revisión por enfermedad",
+                MascotaId = mascotas[2].Id,
+                VeterinarioId = veterinarios[0].Id
+            }
+        };
+                _context.Consultas.AddRange(consultas);
+                await _context.SaveChangesAsync();
+            }
+        }
+
     }
 }

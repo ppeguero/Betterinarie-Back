@@ -31,13 +31,15 @@ namespace Betterinarie_Back.Application.Mappings
                 .ForMember(dest => dest.FechaRegistro, opt => opt.Ignore());
 
             CreateMap<Consulta, ConsultaDto>()
-                .ForMember(dest => dest.Estatus, opt => opt.MapFrom(src => src.Estatus)) 
-                .ForMember(dest => dest.Hora, opt => opt.MapFrom(src => TimeOnly.FromDateTime(src.Fecha)))
-                .ForMember(dest => dest.EstatusNombre, opt => opt.MapFrom(src => src.Estatus.ToString()))
+                .ForMember(dest => dest.Estatus, opt => opt.MapFrom(src => src.Estatus))
+                .ForMember(dest => dest.VeterinarioNombre, opt => opt.MapFrom(src => src.Veterinario != null ? src.Veterinario.Nombre : null))
                 .ForMember(dest => dest.MedicamentosIds, opt => opt.MapFrom(src => src.Medicamentos.Select(m => m.Id).ToList()));
 
+
             CreateMap<ConsultaDto, Consulta>()
-                .ForMember(dest => dest.Estatus, opt => opt.MapFrom(src => (EstatusConsulta)src.Estatus)); 
+                .ForMember(dest => dest.Estatus, opt => opt.MapFrom(src => (EstatusConsulta)src.Estatus))
+                .ForMember(dest => dest.Hora, opt => opt.MapFrom(src => src.Hora)); 
+                            
 
 
             CreateMap<Medicamento, MedicamentoDto>()

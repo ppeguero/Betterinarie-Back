@@ -25,7 +25,7 @@ namespace Betterinarie_Back.Core.Entities.Implementation
         public Mascota Mascota { get; set; }
 
 
-        [ForeignKey("Veterinario")]
+        [ForeignKey("VeterinarioId")]
         public int? VeterinarioId { get; set; }
         public Usuario Veterinario { get; set; }
         public ICollection<Medicamento> Medicamentos { get; set; } = new List<Medicamento>();
