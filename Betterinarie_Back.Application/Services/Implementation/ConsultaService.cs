@@ -65,7 +65,7 @@ namespace Betterinarie_Back.Application.Services.Implementation
             }
         }
 
-        public async Task<ConsultaDto> CreateConsulta(ConsultaDto createDto)
+        public async Task<ConsultaDto> CreateConsulta(ConsultaPostDto createDto)
         {
             try
             {
@@ -84,7 +84,7 @@ namespace Betterinarie_Back.Application.Services.Implementation
             }
         }
 
-        public async Task UpdateConsulta(ConsultaDto updateDto)
+        public async Task UpdateConsulta(ConsultaPostDto updateDto)
         {
             try
             {
