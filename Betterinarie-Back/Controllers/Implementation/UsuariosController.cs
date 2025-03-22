@@ -42,10 +42,21 @@ namespace Betterinarie_Back.Controllers.Implementation
             return CreatedAtAction(nameof(GetById), new { id = usuario.Id }, usuario);
         }
 
+        [HttpPost("{id}/password")]
+        public async Task<IActionResult> UpdatePassword(int id, [FromBody] UpdatePasswordDto updatePasswordDto)
+        {
+            var currentUserId = int.Parse(User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value);
+            if (currentUserId != id) return Forbid();
+            await _usuarioService.UpdatePassword(id, updatePasswordDto.Password);
+            return NoContent();
+        }
+
 
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, [FromBody] UsuarioDto usuarioDto)
         {
+            var currentUserId = int.Parse(User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value);
+            if (currentUserId != id) return Forbid();
             if (id != usuarioDto.Id) return BadRequest("El ID del usuario no coincide");
             if (!ModelState.IsValid) return BadRequest(ModelState);
             await _usuarioService.UpdateUsuario(usuarioDto);

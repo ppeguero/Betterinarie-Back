@@ -14,6 +14,8 @@ namespace Betterinarie_Back.Application.Interfaces.Implementation
         Task<IEnumerable<UsuarioDto>> GetAllUsuarios();
         Task<UsuarioDto> CreateUsuario(RegisterDto createDto);
         Task UpdateUsuario(UsuarioDto updateDto);
+
+        Task UpdatePassword(int usuarioId, string newPassword);
         Task DeleteUsuario(int id);
         Task AssignRolToUsuario(int usuarioId, int rolId);
         Task<IEnumerable<ConsultaDto>> GetConsultasByVeterinario(int veterinarioId);

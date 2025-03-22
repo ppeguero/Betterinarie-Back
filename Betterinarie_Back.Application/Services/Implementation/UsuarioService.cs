@@ -131,7 +131,7 @@ namespace Betterinarie_Back.Application.Services.Implementation
                 usuario.Nombre = updateDto.Nombre;
                 usuario.Apellido = updateDto.Apellido;
                 usuario.Email = updateDto.Email;
-                usuario.UserName = updateDto.Email; // Mantener sincronizados UserName y Email
+                usuario.UserName = updateDto.Email;
 
                 var result = await _userManager.UpdateAsync(usuario);
                 if (!result.Succeeded)
@@ -145,6 +145,31 @@ namespace Betterinarie_Back.Application.Services.Implementation
                     message: "Error al actualizar usuario",
                     stackTrace: ex.StackTrace,
                     userId: updateDto.Id.ToString()
+                );
+                throw;
+            }
+        }
+
+        public async Task UpdatePassword(int usuarioId, string newPassword)
+        {
+            try
+            {
+                var usuario = await _userManager.FindByIdAsync(usuarioId.ToString());
+                if (usuario == null) throw new Exception("Usuario no encontrado");
+
+                var token = await _userManager.GeneratePasswordResetTokenAsync(usuario);
+                var result = await _userManager.ResetPasswordAsync(usuario, token, newPassword);
+                if (!result.Succeeded)
+                {
+                    throw new Exception($"Error al actualizar la contraseña: {string.Join(", ", result.Errors.Select(e => e.Description))}");
+                }
+            }
+            catch (Exception ex)
+            {
+                await _errorLogService.LogErrorAsync(
+                    message: "Error al actualizar la contraseña",
+                    stackTrace: ex.StackTrace,
+                    userId: usuarioId.ToString()
                 );
                 throw;
             }
