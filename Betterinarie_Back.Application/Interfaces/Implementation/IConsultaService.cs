@@ -12,7 +12,7 @@ namespace Betterinarie_Back.Application.Interfaces.Implementation
         Task<ConsultaDto> GetConsultaById(int id);
         Task<IEnumerable<ConsultaDto>> GetAllConsultas();
         Task<ConsultaDto> CreateConsulta(ConsultaPostDto createDto);
-        Task UpdateConsulta(ConsultaPostDto updateDto);
+        Task UpdateConsulta(ConsultaUpdateDto updateDto);
         Task DeleteConsulta(int id);
         Task AssignMedicamentoToConsulta(int consultaId, int medicamentoId);
         Task<IEnumerable<ConsultaDto>> GetConsultasByMascota(int mascotaId);

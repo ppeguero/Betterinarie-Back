@@ -43,7 +43,7 @@ namespace Betterinarie_Back.API.Controllers.Implementation
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, [FromBody] ConsultaPostDto consultaDto)
+        public async Task<IActionResult> Update(int id, [FromBody] ConsultaUpdateDto consultaDto)
         {
             if (id != consultaDto.Id) return BadRequest("El ID de la consulta no coincide");
             if (!ModelState.IsValid) return BadRequest(ModelState);

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Betterinarie_Back.Application.Dtos.Implementation
 {
-    public class ConsultaPostDto
+    public class ConsultaUpdateDto
     {
         public int Id { get; set; }
         public DateTime Fecha { get; set; }
@@ -16,5 +16,6 @@ namespace Betterinarie_Back.Application.Dtos.Implementation
         public string Motivo { get; set; }
         public int MascotaId { get; set; }
         public int VeterinarioId { get; set; }
+        public List<int> MedicamentosIds { get; set; }
     }
 }

@@ -42,6 +42,9 @@ namespace Betterinarie_Back.Application.Mappings
             CreateMap<ConsultaPostDto, Consulta>()
                 .ForMember(dest => dest.Medicamentos, opt => opt.Ignore());
 
+            CreateMap<ConsultaUpdateDto, Consulta>()
+                .ForMember(dest => dest.Medicamentos, opt => opt.Ignore());
+
             CreateMap<Medicamento, MedicamentoDto>()
                 .ForMember(dest => dest.ConsultasIds, opt => opt.MapFrom(src => src.Consultas.Select(c => c.Id).ToList()));
 

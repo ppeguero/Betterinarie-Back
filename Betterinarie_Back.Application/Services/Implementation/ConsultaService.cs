@@ -84,7 +84,7 @@ namespace Betterinarie_Back.Application.Services.Implementation
             }
         }
 
-        public async Task UpdateConsulta(ConsultaPostDto updateDto)
+        public async Task UpdateConsulta(ConsultaUpdateDto updateDto)
         {
             try
             {
