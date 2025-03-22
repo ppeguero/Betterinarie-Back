@@ -20,7 +20,8 @@ namespace Betterinarie_Back.Infrastructure.Repositories.Implementation
             return await _context.Consultas
                 .Where(c => c.MascotaId == mascotaId)
                 .Include(c => c.Medicamentos)
-            .ToListAsync();
+                .Include(c => c.Veterinario)
+                .ToListAsync();
         }
 
         public async Task<IEnumerable<Consulta>> GetConsultasByVeterinarioId(int veterinarioId)
@@ -28,6 +29,7 @@ namespace Betterinarie_Back.Infrastructure.Repositories.Implementation
             return await _context.Consultas
                 .Where(c => c.VeterinarioId == veterinarioId)
                 .Include(c => c.Medicamentos)
+                .Include(c => c.Veterinario)
                 .ToListAsync();
         }
     }

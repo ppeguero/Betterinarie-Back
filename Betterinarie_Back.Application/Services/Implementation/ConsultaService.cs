@@ -31,7 +31,7 @@ namespace Betterinarie_Back.Application.Services.Implementation
         {
             try
             {
-                var consulta = await _consultaRepository.GetById(id, c => c.Medicamentos);
+                var consulta = await _consultaRepository.GetById(id, c => c.Medicamentos, c => c.Veterinario);
                 if (consulta == null) return null;
                 return _mapper.Map<ConsultaDto>(consulta);
             }
@@ -46,11 +46,12 @@ namespace Betterinarie_Back.Application.Services.Implementation
             }
         }
 
+
         public async Task<IEnumerable<ConsultaDto>> GetAllConsultas()
         {
             try
             {
-                var consultas = await _consultaRepository.GetAll(c => c.Medicamentos);
+                var consultas = await _consultaRepository.GetAll(c => c.Medicamentos, c => c.Veterinario);
                 return _mapper.Map<IEnumerable<ConsultaDto>>(consultas);
             }
             catch (Exception ex)
@@ -64,7 +65,7 @@ namespace Betterinarie_Back.Application.Services.Implementation
             }
         }
 
-        public async Task<ConsultaDto> CreateConsulta(ConsultaDto createDto)
+        public async Task<ConsultaDto> CreateConsulta(ConsultaPostDto createDto)
         {
             try
             {
@@ -83,7 +84,7 @@ namespace Betterinarie_Back.Application.Services.Implementation
             }
         }
 
-        public async Task UpdateConsulta(ConsultaDto updateDto)
+        public async Task UpdateConsulta(ConsultaUpdateDto updateDto)
         {
             try
             {
@@ -93,10 +94,6 @@ namespace Betterinarie_Back.Application.Services.Implementation
                 Console.WriteLine(consulta.Estatus);
                 Console.WriteLine( updateDto.Estatus);
 
-                if (!EsCambioDeEstadoValido(consulta.Estatus, updateDto.Estatus))
-                {
-                    throw new Exception("Cambio de estado no permitido");
-                }
 
                 _mapper.Map(updateDto, consulta);
                 await _consultaRepository.Update(consulta);
@@ -112,24 +109,6 @@ namespace Betterinarie_Back.Application.Services.Implementation
             }
         }
 
-        private bool EsCambioDeEstadoValido(EstatusConsulta estadoActual, EstatusConsulta nuevoEstado)
-        {
-            var transicionesValidas = new Dictionary<EstatusConsulta, List<EstatusConsulta>>
-            {
-                { EstatusConsulta.Pendiente, new List<EstatusConsulta> { EstatusConsulta.EnProgreso, EstatusConsulta.Cancelada, EstatusConsulta.Completada } },
-                { EstatusConsulta.EnProgreso, new List<EstatusConsulta> { EstatusConsulta.Completada, EstatusConsulta.Cancelada, EstatusConsulta.Pendiente } },
-                { EstatusConsulta.Completada, new List<EstatusConsulta> { EstatusConsulta.EnProgreso, EstatusConsulta.Cancelada, EstatusConsulta.Pendiente } },
-                { EstatusConsulta.Cancelada, new List<EstatusConsulta> { EstatusConsulta.EnProgreso, EstatusConsulta.Completada, EstatusConsulta.Pendiente } }
-            };
-
-            Console.WriteLine($"Estado actual: {estadoActual}, Nuevo estado: {nuevoEstado}");
-
-            bool valido = transicionesValidas.ContainsKey(estadoActual) && transicionesValidas[estadoActual].Contains(nuevoEstado);
-
-            Console.WriteLine($"Cambio de estado permitido: {valido}");
-
-            return valido;
-        }
 
 
         public async Task DeleteConsulta(int id)

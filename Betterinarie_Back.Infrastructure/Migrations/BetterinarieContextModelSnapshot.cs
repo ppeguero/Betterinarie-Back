@@ -84,7 +84,7 @@ namespace Betterinarie_Back.Infrastructure.Migrations
 
                     b.HasIndex("VeterinarioId");
 
-                    b.ToTable("Consultas");
+                    b.ToTable("Consultas", (string)null);
                 });
 
             modelBuilder.Entity("Betterinarie_Back.Core.Entities.Implementation.Mascota", b =>
@@ -131,7 +131,7 @@ namespace Betterinarie_Back.Infrastructure.Migrations
 
                     b.HasIndex("UsuarioId");
 
-                    b.ToTable("Mascotas");
+                    b.ToTable("Mascotas", (string)null);
                 });
 
             modelBuilder.Entity("Betterinarie_Back.Core.Entities.Implementation.Medicamento", b =>
@@ -165,7 +165,7 @@ namespace Betterinarie_Back.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Medicamentos");
+                    b.ToTable("Medicamentos", (string)null);
                 });
 
             modelBuilder.Entity("Betterinarie_Back.Core.Entities.Implementation.Rol", b =>
@@ -304,7 +304,7 @@ namespace Betterinarie_Back.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("LogErrors");
+                    b.ToTable("LogErrors", (string)null);
                 });
 
             modelBuilder.Entity("ConsultaMedicamento", b =>
@@ -319,7 +319,7 @@ namespace Betterinarie_Back.Infrastructure.Migrations
 
                     b.HasIndex("MedicamentosId");
 
-                    b.ToTable("ConsultaMedicamento");
+                    b.ToTable("ConsultaMedicamento", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
