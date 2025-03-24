@@ -64,10 +64,15 @@ namespace Betterinarie_Back.Infrastructure.Repositories.Implementation
         {
             var cliente = await _context.Clientes
                 .Include(c => c.Mascotas)
+                .ThenInclude(m => m.Consultas)
                 .FirstOrDefaultAsync(c => c.Id == id);
 
             if (cliente == null)
                 throw new Exception("Cliente no encontrado");
+
+            foreach (var mascota in cliente.Mascotas) {
+                _context.Consultas.RemoveRange(mascota.Consultas);
+            }
 
             _context.Mascotas.RemoveRange(cliente.Mascotas);
             _context.Clientes.Remove(cliente);
