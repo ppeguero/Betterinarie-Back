@@ -87,13 +87,11 @@ namespace Betterinarie_Back.Application.Services.Implementation
                 var cliente = await _clienteRepository.GetById(updateDto.Id, c => c.Mascotas);
                 if (cliente == null) throw new Exception("Cliente no encontrado");
 
-                // Asignación manual de campos
                 cliente.Nombre = updateDto.Nombre;
                 cliente.Apellido = updateDto.Apellido;
                 cliente.Direccion = updateDto.Direccion;
                 cliente.Telefono = updateDto.Telefono;
 
-                // Llamar al repositorio para sincronizar mascotas y guardar
                 await _clienteRepository.UpdateClienteWithMascotasAsync(cliente, updateDto.MascotasIds);
             }
             catch (Exception ex)
