@@ -11,6 +11,7 @@ namespace Betterinarie_Back.Core.Interfaces.Implementation
     {
         //Task<IEnumerable<Mascota>> GetMascotasByClienteId(int clienteId);
         Task<IEnumerable<Consulta>> GetHistorialCitas(int mascotaId);
+        Task DeleteMascotaWithConsultasAsync(int id); 
 
     }
 }

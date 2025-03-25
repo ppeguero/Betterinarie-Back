@@ -33,5 +33,22 @@ namespace Betterinarie_Back.Infrastructure.Repositories.Implementation
                 .OrderByDescending(c => c.Fecha)
                 .ToListAsync();
         }
+
+        public async Task DeleteMascotaWithConsultasAsync(int id)
+        {
+            var mascota = await _context.Mascotas
+                .Include(x => x.Consultas)
+                .FirstOrDefaultAsync(x => x.Id == id);
+
+            if (mascota == null) throw new Exception("Mascota no encontrada");
+
+            if (mascota.Consultas != null && mascota.Consultas.Any())
+            {
+                _context.Consultas.RemoveRange(mascota.Consultas);
+            }
+
+            _context.Mascotas.Remove(mascota);
+            await _context.SaveChangesAsync();
+        }
     }
 }
