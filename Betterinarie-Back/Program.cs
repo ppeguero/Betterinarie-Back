@@ -140,6 +140,7 @@ app.UseAuthentication();
 app.UseAuthorization(); 
 app.UseHttpsRedirection();
 app.UseCors(myAllowedOrigins);
+app.UseStaticFiles();
 
 app.UseMiddleware<ErrorLoggingMiddleware>();
 

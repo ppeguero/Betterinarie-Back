@@ -79,13 +79,16 @@ namespace Betterinarie_Back.Application.Services.Implementation
                 if (createDto.ImagenFile != null && createDto.ImagenFile.Length > 0)
                 {
                     string fileName = createDto.Nombre.Replace(" ", "_");
-                    var uploadResult = await _cloudinaryService.UploadImage(
-                        createDto.ImagenFile,
-                        "mascotas",
-                        fileName
-                    );
-                    mascota.URLImagen = uploadResult.SecureUrl.ToString();
-                    mascota.PublicIdImagen = uploadResult.PublicId;
+                    using (var stream = createDto.ImagenFile.OpenReadStream())
+                    {
+                        var uploadResult = await _cloudinaryService.UploadImage(
+                            stream,
+                            "mascotas",
+                            fileName
+                        );
+                        mascota.URLImagen = uploadResult.SecureUrl.ToString();
+                        mascota.PublicIdImagen = uploadResult.PublicId;
+                    }
                 }
 
                 await _mascotaRepository.Add(mascota);
@@ -110,18 +113,23 @@ namespace Betterinarie_Back.Application.Services.Implementation
                 if (mascota == null) throw new Exception("Mascota no encontrada");
                 _mapper.Map(updateDto, mascota);
 
-                if (updateDto.ImagenFile != null && updateDto.ImagenFile.Length > 0) {
-                    if (!string.IsNullOrEmpty(mascota.PublicIdImagen)) 
+                if (updateDto.ImagenFile != null && updateDto.ImagenFile.Length > 0)
+                {
+                    if (!string.IsNullOrEmpty(mascota.PublicIdImagen))
                     {
                         await _cloudinaryService.DeleteImage(mascota.PublicIdImagen);
                     }
 
-                    var uploadResult = await _cloudinaryService.UploadImage(
-                        updateDto.ImagenFile,
-                        "mascotas",
-                        updateDto.Nombre.Replace(" ", "_"));
-                    mascota.URLImagen = uploadResult.SecureUrl.ToString();
-                    mascota.PublicIdImagen = uploadResult.PublicId;
+                    using (var stream = updateDto.ImagenFile.OpenReadStream())
+                    {
+                        var uploadResult = await _cloudinaryService.UploadImage(
+                            stream,
+                            "mascotas",
+                            updateDto.Nombre.Replace(" ", "_")
+                        );
+                        mascota.URLImagen = uploadResult.SecureUrl.ToString();
+                        mascota.PublicIdImagen = uploadResult.PublicId;
+                    }
                 }
 
                 await _mascotaRepository.Update(mascota);
@@ -149,7 +157,7 @@ namespace Betterinarie_Back.Application.Services.Implementation
                     await _cloudinaryService.DeleteImage(mascota.PublicIdImagen);
                 }
 
-                await _mascotaRepository.Delete(id);
+                await _mascotaRepository.DeleteMascotaWithConsultasAsync(id);
             }
             catch (Exception ex)
             {
