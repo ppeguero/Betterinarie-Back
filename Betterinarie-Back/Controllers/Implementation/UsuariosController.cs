@@ -63,6 +63,16 @@ namespace Betterinarie_Back.Controllers.Implementation
             return NoContent();
         }
 
+        [HttpPut("{id}/admin")]
+        [Authorize(Roles = "Administrador")] 
+        public async Task<IActionResult> UpdateForAdmin(int id, [FromBody] UsuarioEditDto usuarioEditDto)
+        {
+            if (id != usuarioEditDto.Id) return BadRequest("El ID del usuario no coincide");
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+            var usuario = await _usuarioService.UpdateUsuarioForAdmin(usuarioEditDto);
+            return Ok(usuario);
+        }
+
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {

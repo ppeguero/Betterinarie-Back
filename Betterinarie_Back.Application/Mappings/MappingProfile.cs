@@ -9,13 +9,18 @@ namespace Betterinarie_Back.Application.Mappings
     {
         public MappingProfile()
         {
-            // Mapeo de Usuario a UsuarioDto
             CreateMap<Usuario, UsuarioDto>()
                 .ForMember(dest => dest.ConsultasIds, opt => opt.MapFrom(src => src.Consultas.Select(c => c.Id).ToList()));
-
-            // Mapeo de UsuarioDto a Usuario
             CreateMap<UsuarioDto, Usuario>()
                 .ForMember(dest => dest.Consultas, opt => opt.Ignore());
+
+            CreateMap<Usuario, UsuarioEditDto>();
+            CreateMap<UsuarioEditDto, Usuario>()
+                .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.Email))
+                .ForMember(dest => dest.Consultas, opt => opt.Ignore())
+                .ForMember(dest => dest.RefreshToken, opt => opt.Ignore())
+                .ForMember(dest => dest.RefreshTokenExpiryTime, opt => opt.Ignore())
+                .ForMember(dest => dest.PasswordHash, opt => opt.Ignore());
 
             CreateMap<Rol, RolDto>()
              .ForMember(dest => dest.Nombre, opt => opt.MapFrom(src => src.Name));
@@ -48,14 +53,12 @@ namespace Betterinarie_Back.Application.Mappings
             CreateMap<Medicamento, MedicamentoDto>()
                 .ForMember(dest => dest.ConsultasIds, opt => opt.MapFrom(src => src.Consultas.Select(c => c.Id).ToList()));
 
-            // Mapeo de MedicamentoDto a Medicamento
             CreateMap<MedicamentoDto, Medicamento>()
                 .ForMember(dest => dest.Consultas, opt => opt.Ignore());
 
-            // Mapeo de Cliente a ClienteDto
             CreateMap<Cliente, ClienteDto>()
                 .ForMember(dest => dest.Mascotas, opt => opt.MapFrom(src => src.Mascotas));
-            // Mapeo de ClienteDto a Cliente
+
             CreateMap<ClienteDto, Cliente>()
                 .ForMember(dest => dest.Mascotas, opt => opt.Ignore());
         }
