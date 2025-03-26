@@ -53,8 +53,8 @@ public class SeedData
             var users = new[]
             {
               new { Email = "pipa@betterinariesystem.com", Nombre = "Pipa", Apellido = "Administradora", Password = "Admin123!", Role = "Administrador" },
-              new { Email = "jose@betterinariesystem.com", Nombre = "José", Apellido = "Martinez", Password = "Admin123!", Role = "Administrador" },
-              new { Email = "pech@betterinariesystem.com", Nombre = "Pech", Apellido = "Veterinario", Password = "Vet123!", Role = "Veterinario" },
+              new { Email = "jose@betterinariesystem.com", Nombre = "José", Apellido = "Martinez", Password = "Admin123!", Role = "Veterinario" },
+              new { Email = "pech@betterinariesystem.com", Nombre = "Pech", Apellido = "Veterinario", Password = "Vet123!", Role = "Recepcionista" },
               new { Email = "eduardo@betterinariesystem.com", Nombre = "Eduardo", Apellido = "Recepcionista", Password = "Recep123!", Role = "Recepcionista" }
             };
 
