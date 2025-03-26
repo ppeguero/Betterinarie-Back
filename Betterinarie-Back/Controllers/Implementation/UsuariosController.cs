@@ -9,7 +9,6 @@ namespace Betterinarie_Back.Controllers.Implementation
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize(Roles = "Administrador")]
     public class UsuariosController : ControllerBase
     {
         private readonly IUsuarioService _usuarioService;
@@ -20,6 +19,8 @@ namespace Betterinarie_Back.Controllers.Implementation
         }
 
         [HttpGet]
+        [Authorize(Roles = "Administrador")]
+
         public async Task<IActionResult> GetAll()
         {
             var usuarios = await _usuarioService.GetAllUsuarios();
@@ -27,6 +28,8 @@ namespace Betterinarie_Back.Controllers.Implementation
         }
 
         [HttpGet("{id}")]
+        [Authorize]
+
         public async Task<IActionResult> GetById(int id)
         {
             var usuario = await _usuarioService.GetUsuarioById(id);
@@ -35,6 +38,8 @@ namespace Betterinarie_Back.Controllers.Implementation
         }
 
         [HttpPost]
+        [Authorize(Roles = "Administrador")]
+
         public async Task<IActionResult> Create([FromBody] RegisterDto registerDto)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
@@ -43,6 +48,8 @@ namespace Betterinarie_Back.Controllers.Implementation
         }
 
         [HttpPost("{id}/password")]
+        [Authorize]
+
         public async Task<IActionResult> UpdatePassword(int id, [FromBody] UpdatePasswordDto updatePasswordDto)
         {
             var currentUserId = int.Parse(User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value);
@@ -53,6 +60,9 @@ namespace Betterinarie_Back.Controllers.Implementation
 
 
         [HttpPut("{id}")]
+        [Authorize]
+
+
         public async Task<IActionResult> Update(int id, [FromBody] UsuarioDto usuarioDto)
         {
             var currentUserId = int.Parse(User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value);
@@ -64,7 +74,8 @@ namespace Betterinarie_Back.Controllers.Implementation
         }
 
         [HttpPut("{id}/admin")]
-        [Authorize(Roles = "Administrador")] 
+        [Authorize(Roles = "Administrador")]
+
         public async Task<IActionResult> UpdateForAdmin(int id, [FromBody] UsuarioEditDto usuarioEditDto)
         {
             if (id != usuarioEditDto.Id) return BadRequest("El ID del usuario no coincide");
@@ -74,6 +85,8 @@ namespace Betterinarie_Back.Controllers.Implementation
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Administrador")]
+
         public async Task<IActionResult> Delete(int id)
         {
             await _usuarioService.DeleteUsuario(id);
@@ -81,6 +94,8 @@ namespace Betterinarie_Back.Controllers.Implementation
         }
 
         [HttpPost("{usuarioId}/roles/{rolId}")]
+        [Authorize(Roles = "Administrador")]
+
         public async Task<IActionResult> AssignRol(int usuarioId, int rolId)
         {
             await _usuarioService.AssignRolToUsuario(usuarioId, rolId);
@@ -89,6 +104,8 @@ namespace Betterinarie_Back.Controllers.Implementation
 
 
         [HttpGet("{veterinarioId}/consultas")]
+        [Authorize]
+
         public async Task<IActionResult> GetConsultas(int veterinarioId)
         {
             var consultas = await _usuarioService.GetConsultasByVeterinario(veterinarioId);
