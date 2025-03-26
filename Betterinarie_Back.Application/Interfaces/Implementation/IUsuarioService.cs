@@ -19,5 +19,7 @@ namespace Betterinarie_Back.Application.Interfaces.Implementation
         Task DeleteUsuario(int id);
         Task AssignRolToUsuario(int usuarioId, int rolId);
         Task<IEnumerable<ConsultaDto>> GetConsultasByVeterinario(int veterinarioId);
+
+        Task<UsuarioDto> UpdateUsuarioForAdmin(UsuarioEditDto editDto);
     }
 }

@@ -98,7 +98,7 @@ namespace Betterinarie_Back.Application.Services.Implementation
             {
                 var usuario = new Usuario
                 {
-                    UserName = createDto.Email, // Identity requiere UserName
+                    UserName = createDto.Email, 
                     Email = createDto.Email,
                     Nombre = createDto.Nombre,
                     Apellido = createDto.Apellido
@@ -108,7 +108,16 @@ namespace Betterinarie_Back.Application.Services.Implementation
                 {
                     throw new Exception($"Error al crear usuario: {string.Join(", ", result.Errors.Select(e => e.Description))}");
                 }
-                return _mapper.Map<UsuarioDto>(usuario);
+
+                if (createDto.RolId.HasValue)
+                {
+                    await AssignRolToUsuario(usuario.Id, createDto.RolId.Value);
+                }
+                var usuarioDto = _mapper.Map<UsuarioDto>(usuario);
+                var roles = await _userManager.GetRolesAsync(usuario);
+                usuarioDto.Roles = roles.ToList();
+
+                return usuarioDto;
             }
             catch (Exception ex)
             {
@@ -116,6 +125,56 @@ namespace Betterinarie_Back.Application.Services.Implementation
                     message: "Error al crear usuario",
                     stackTrace: ex.StackTrace,
                     userId: null
+                );
+                throw;
+            }
+        }
+
+        public async Task<UsuarioDto> UpdateUsuarioForAdmin(UsuarioEditDto editDto)
+        {
+            try
+            {
+                var usuario = await _userManager.FindByIdAsync(editDto.Id.ToString());
+                if (usuario == null) throw new Exception("Usuario no encontrado");
+
+                _mapper.Map(editDto, usuario);
+
+                var result = await _userManager.UpdateAsync(usuario);
+                if (!result.Succeeded)
+                {
+                    throw new Exception($"Error al actualizar usuario: {string.Join(", ", result.Errors.Select(e => e.Description))}");
+                }
+                if (!string.IsNullOrEmpty(editDto.Password))
+                {
+                    var token = await _userManager.GeneratePasswordResetTokenAsync(usuario);
+                    var passwordResult = await _userManager.ResetPasswordAsync(usuario, token, editDto.Password);
+                    if (!passwordResult.Succeeded)
+                    {
+                        throw new Exception($"Error al actualizar la contraseña: {string.Join(", ", passwordResult.Errors.Select(e => e.Description))}");
+                    }
+                }
+
+                if (editDto.RolId.HasValue) 
+                {
+                    var cRoles = await _userManager.GetRolesAsync(usuario);
+                    if (cRoles.Any())
+                    {
+                        await _userManager.RemoveFromRolesAsync(usuario, cRoles);
+                    }
+                    await AssignRolToUsuario(usuario.Id, editDto.RolId.Value);
+                }
+
+                var usuarioDto = _mapper.Map<UsuarioDto>(usuario);
+                var roles = await _userManager.GetRolesAsync(usuario);
+                usuarioDto.Roles = roles.ToList();
+                return usuarioDto;
+            }
+            catch (Exception ex)
+            {
+                await _errorLogService.LogErrorAsync(
+                message: "Error al actualizar usuario desde admin",
+                stackTrace: ex.StackTrace,
+                userId: editDto.Id.ToString()
                 );
                 throw;
             }
