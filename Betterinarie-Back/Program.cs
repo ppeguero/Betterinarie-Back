@@ -20,11 +20,12 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("Front", policy =>
+    options.AddPolicy("AllowFrontend", policy =>
     {
-        policy.WithOrigins("http://localhost:5173")
+        policy.WithOrigins("https://localhost:5173")
                          .AllowAnyHeader()
-                         .AllowAnyMethod();
+                         .AllowAnyMethod()
+                         .AllowCredentials();
     });
 });
 
@@ -98,18 +99,7 @@ builder.Services.AddAuthentication(x =>
     };
 });
 
-var myAllowedOrigins = "_myAllowedOrigins";
 
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy(name: myAllowedOrigins,
-        policy =>
-        {
-            policy.WithOrigins("http://localhost:5173") // Permitir tu frontend de Vue
-                  .AllowAnyMethod()
-                  .AllowAnyHeader();
-        });
-});
 
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped<IUsuarioService, UsuarioService>();
@@ -135,11 +125,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseCors("Front");
+app.UseCors("AllowFrontend");
 app.UseAuthentication();
 app.UseAuthorization(); 
 app.UseHttpsRedirection();
-app.UseCors(myAllowedOrigins);
 app.UseStaticFiles();
 
 app.UseMiddleware<ErrorLoggingMiddleware>();
